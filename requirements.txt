@@ -8,3 +8,4 @@ jupyter
 kaggle
 pdfplumber
 tabula-py
+knoema
