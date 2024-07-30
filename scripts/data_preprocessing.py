@@ -16,24 +16,28 @@ def preprocess_data():
     if not os.path.exists(processed_data_dir):
         os.makedirs(processed_data_dir)
     
-    # Example: Load and preprocess data
+    # Load data from the specific sheet '2023_dataset'
     file_path = os.path.join(raw_data_dir, 'global.xlsx')
+    sheet_name = '2023_dataset'
+    data = pd.read_excel(file_path, sheet_name=sheet_name)
     
-    if os.path.exists(file_path):
-        data = pd.read_excel(file_path, engine='openpyxl')
-        
-        # Example preprocessing steps
-        data.fillna(0, inplace=True)
-        
-        # Save processed data
-        processed_file_path = os.path.join(processed_data_dir, 'processed_data.csv')
-        data.to_csv(processed_file_path, index=False)
-        print(f"Processed data saved to {processed_file_path}")
-    else:
-        print(f"File {file_path} does not exist.")
+    # Example preprocessing steps
+    # 1. Drop rows with missing values
+    data = data.dropna()
+    
+    # 2. Convert categorical columns to numeric (if any)
+    # Example: Convert 'Category' column to numeric codes
+    if 'Category' in data.columns:
+        data['Category'] = data['Category'].astype('category').cat.codes
+    
+    # 3. Normalize numeric columns (if needed)
+    # Example: Normalize 'Value' column
+    if 'Value' in data.columns:
+        data['Value'] = (data['Value'] - data['Value'].mean()) / data['Value'].std()
+    
+    # Save the processed data
+    processed_file_path = os.path.join(processed_data_dir, 'processed_data.csv')
+    data.to_csv(processed_file_path, index=False)
 
 if __name__ == "__main__":
-    """
-    Run the data preprocessing script
-    """
     preprocess_data()
