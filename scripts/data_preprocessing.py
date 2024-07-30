@@ -20,18 +20,17 @@ def preprocess_data():
     file_path = os.path.join(raw_data_dir, 'global.xlsx')
     sheet_name = '2023_dataset'
     data = pd.read_excel(file_path, sheet_name=sheet_name)
-    
-    # Example preprocessing steps
+
     # 1. Drop rows with missing values
     data = data.dropna()
-    
+
     # 2. Convert categorical columns to numeric (if any)
-    # Example: Convert 'Category' column to numeric codes
+
     if 'Category' in data.columns:
         data['Category'] = data['Category'].astype('category').cat.codes
     
     # 3. Normalize numeric columns (if needed)
-    # Example: Normalize 'Value' column
+
     if 'Value' in data.columns:
         data['Value'] = (data['Value'] - data['Value'].mean()) / data['Value'].std()
     
